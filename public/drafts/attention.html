@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+    >
+    <title>aaron.kriegman.net</title>
+    <link rel="stylesheet" href="/css/serenity.css" kind="text/css">
+    <link rel="stylesheet" href="/css/aaron.css" kind="text/css">
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css"
+      integrity="sha384-bYdxxUwYipFNohQlHt0bjN/LCpueqWz13HufFEV1SUatKs1cm4L6fFgCi1jT643X"
+      crossorigin="anonymous"
+    >
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js"
+      integrity="sha384-Qsn9KnoKISj6dI8g7p1HBlNpVx0I8p1SvlwOldgi3IorMle61nQy4zEahWYtljaz"
+      crossorigin="anonymous"
+    >
+    </script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js"
+      integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+      crossorigin="anonymous"
+    >
+    </script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+    });
+    </script>
+  </head>
+  <body>
+    <div id="content">
+      <h3>
+        <a href="/">Aaron Kriegman</a> /
+        <a href="/blog/">Blog</a> /
+      </h3>
+      <h1>Attention Is All There Is</h1>
+      <div class="byline">
+        <p>14 December 2025</p>
+      </div>
+      <p>
+        Attention is very important. I probably don't need to convince you of
+        this. But I claim that attention is even more important than you think
+        it is, which I definitionally do need to convince you of. More
+        specifically, I claim that attention is the most valuable resource on
+        Earth, and that in some sense attention is more fundamental than
+        "existence" and "entropy".
+      </p>
+      <p>
+        What are the most successful species on Earth? It's hard to compare ants
+        to trees, and it's not clear how to define "success", but we can choose
+        some reasonable definition and compare similar species, eg dogs to
+        wolves, corn to rye, cows to deer, etc. If we do this, a pattern starts
+        to emerge: the most successful species are the ones that have managed to
+        harness human attention<sup id="fnref:1"><a
+            href="#fn:1"
+            class="footnote-ref"
+            role="doc-noteref"
+          >1</a></sup>.
+      </p>
+      <p>
+        Who are the largest consumers of attention? Advertisers is a good guess,
+        but they're second. The largest consumers of attention are employers.
+      </p>
+      <h2 id="socialization">Socialization</h2>
+      <p>
+        Most nonverbal communication and other hemming and hawing is just a way
+        to barter for attention. You can express excitement while someone is
+        talking to communicate to the group that you have something to say. The
+        level of excitement you show indicates how worthy of attention the thing
+        you want to say is. When multiple people have something to say, this
+        nonverbal (well actually it is verbal, but not full sentences)
+        communication is usually enough for everyone to know who's thing is the
+        most interesting, and everyone else steps back and lets them speak. At
+        least, in my circles most people are good at this game and play
+        cooperatively. Some people I meet are bad at this game and they are very
+        annoying.
+      </p>
+      <p>
+        There's a bit of a prisoner's dilemma here. When Alice speaks, everyone
+        else gains some value from hearing what she has to say, and Alice gains
+        some respect and social capital. Bob has something slightly less
+        interesting to say, but interesting enough that the social capital he
+        would gain from speaking is of greater value to him than hearing what
+        Alice has to say. Bob can express a dishonest level of excitement to
+        make the group listen to him instead of Alice. But in practice, in my
+        circles at least, people do not defect. Why? The answer is that we lose
+        respect for people who defect. If you take up too much space in the
+        conversation, then people are less likely to want to be around you. This
+        is enough to offset the incentive for Bob to misrepresent what he has to
+        say.
+      </p>
+      <h2 id="what-is-attention">What is attention?</h2>
+      <p>
+        We don't need a precise definition of attention for the above discussion
+        to make sense, but I believe that there is a physically precise
+        definition that will allow us to make substantial statements. It goes
+        something like this: an observer system $O$ is <em>paying attention</em>
+        to a primary system $A$ if the state of $O$ depends on the state of $A$.
+        There's some work to be done to make this physically precise and time
+        dependent, and maybe to make it a quantity instead of just a relation.
+        But this rough definition is good enough for speculation and
+        applications.
+      </p>
+      <h2 id="entropy">Entropy</h2>
+      <p>
+        When physicists talk about the entropy of a physical system, it's always
+        conditioned on some high level constraints which are in general fuzzy.
+        They'll give a description of the system, then they'll usually impose
+        some numeric constraints such as an expected energy, which isn't so bad,
+        and then they'll impose some further constraints like "the oxygen is all
+        on this side of the membrane and the nitrogen is all on the other." Then
+        the entropy is the randomness left in the system subject to these
+        constraints. The problem is that the entropy is then not a property of
+        the system, it's a property of the system plus these constraints, which
+        can in general be anything we can describe.
+      </p>
+      <p>
+        I believe the way to resolve this is to embrace the subjectivity of
+        entropy and make that subjectivity rigorous. We can choose some observer
+        system $O$ such as a thermometer, a person, or a neuron, and ask how
+        much (Shannon) entropy is left in the primary system after conditioning
+        on the state of the observer.
+      </p>
+      <h2 id="existence">Existence</h2>
+      <p>
+        One corner case worth considering is when $O$ is the entire universe.
+        "The universe's state depends on your state" is the same as saying you
+        exist. So you exist if and only if the universe is paying attention to
+        you. Attention from the universe is "natural selection", and attention
+        from other systems is other types of selection.
+      </p>
+      <p>
+        This is a trivial edge case, but there is a more substantial sense in
+        which existence is attention. When you have sex with someone, you are
+        paying them a certain type of attention with certain parts of your body,
+        and this attention is necessary for their continued existence. When I
+        say "their" continued existence, obviously as an individual they do not
+        need sex for their continued existence, but we are not individuals<sup
+          id="fnref:2"
+        ><a
+            href="#fn:2"
+            class="footnote-ref"
+            role="doc-noteref"
+          >2</a></sup>.
+      </p>
+      <p>
+        So this framework makes it precise how sexual selection and natural
+        selection are two specific cases of the same general thing.
+      </p>
+      <h2 id="intelligence">Intelligence</h2>
+      <p>
+        Choosing what to pay attention to is arguably the primary role of
+        intelligent systems. Some of the primitive mechanisms of intelligence
+        are ion channels in living things, neurons in the brain, transistors in
+        computing, and ReLU-like activation functions in deep learning. What
+        these all have in common is that their primary function is to select
+        when information is propogated and when it is discarded. Evolution
+        itself, the primitive intelligent system that all other intelligent
+        systems are a part of, is driven by natural selection, a special case of
+        attention. The "attention mechanism" in machine learning &mdash; the
+        innovation behind the current language model revolution, famously
+        popularized by the Google paper "Attention Is All You Need" &mdash; is
+        an example of an "attention mechanism".
+      </p>
+      <h2 id="duality">Duality</h2>
+      <p>
+        Maybe I'm just a dualitypilled mathcel, but I think there may be a
+        duality between attention and information. Information is what a system
+        puts out, attention is what it takes in, and there is a natural pairing
+        between information and attention since information is what you pay
+        attention to. There's two main types of dualities in mathematics: the
+        kind where the dual objects are equal and opposite to the primal
+        objects, and the kind where the dual objects occupy a vaster space and
+        have additional structure making them more powerful. I think the
+        attention-information duality may be the second type. Here are some of
+        the asymmetries:
+      </p>
+      <ul>
+        <li>
+          Information is easy to copy, making it much cheaper than attention
+          which cannot be duplicated.
+        </li>
+        <li>
+          Information speaks for itself, while attention can only be understood
+          through the information it pays attention to. This is why you can
+          learn most of what there is to know about someone's body within a few
+          seconds of meeting them, but it takes years to get to know their mind.
+        </li>
+      </ul>
+      <h2 id="so">So,</h2>
+      <p>
+        I am working on building a market for attention. That's why I haven't
+        had time to focus on making this all precise. If you found any of this
+        exciting or if you want to get involved, reach out. In fact, give me a
+        call: <a href="tel:+1-617-615-1613">+1 617 615 1613</a>
+      </p>
+      <p>
+        I've been told that people are sick of hearing about new markets. If
+        that's you, then consider that a market for attention is a market for
+        everything.
+      </p>
+      <div class="footnotes" role="doc-endnotes">
+        <hr>
+        <ol>
+          <li id="fn:1">
+            <p>
+              Obviously there's many ways to frame this pattern and I have
+              chosen the one that supports my claim.&#160;<a
+                href="#fnref:1"
+                class="footnote-backref"
+                role="doc-backlink"
+              >&#x21a9;&#xfe0e;</a>
+            </p>
+          </li>
+          <li id="fn:2">
+            <p>
+              This is a dangerous thing for me to say. I am suggesting that we
+              "need" sex, and in our culture it is a commonly held value that we
+              are entitled to things that we need. Therefore it sounds like I'm
+              saying that we are entitled to sex, which would be a toxic and
+              absurd thing to say. If the conclusion is wrong then one of the
+              premises must be wrong. It is not hard to see that "we" literally
+              need sex, since (barring modern technology) sex is a necessary
+              prerequisite for life. The value statement of "people are entitled
+              to their needs" does not have any logical basis, as value
+              statements generally do not have and do not need, and it is shaky
+              for many reasons. So this absurd conclusion is a strong reason to
+              not hold this value. We can try to salvage it by instead holding
+              that "<em>individuals</em> are entitled to their needs", which is
+              not proven absurd by this argument since <em>individuals</em> do
+              not need sex, but this value is if anything shakier, since we are
+              not individuals.&#160;<a
+                href="#fnref:2"
+                class="footnote-backref"
+                role="doc-backlink"
+              >&#x21a9;&#xfe0e;</a>
+            </p>
+          </li>
+        </ol>
+      </div>
+    </div>
+    <div class="footer">
+      <hr>
+      Made with <a href="https://gohugo.io/">Hugo</a> and <a
+        href="https://hale.su/serenity.html"
+      >serenity.css</a>, clone this site on <a
+        href="https://github.com/akriegman/aaron.kriegman.net"
+      >GitHub</a>.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+function new {
+  # tbd if I'd rather write in HTML or in markdown
+  # in the skeleton of the Hugo project
+  # hugo new content blog/$1.md
+  pass
+}
+
+function pub {
+  rsync -av public ak2313@webserver.srcf.net:~/public_html/
+}
+
+function run {
+  python -m http.server
+}

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <title>aaah.run</title>
+    <link rel="stylesheet" href="/css/serenity.css" kind="text/css">
+    <link rel="stylesheet" href="/css/aaron.css" kind="text/css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css" integrity="sha384-bYdxxUwYipFNohQlHt0bjN/LCpueqWz13HufFEV1SUatKs1cm4L6fFgCi1jT643X" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js" integrity="sha384-Qsn9KnoKISj6dI8g7p1HBlNpVx0I8p1SvlwOldgi3IorMle61nQy4zEahWYtljaz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+	        renderMathInElement(document.body, {
+	            delimiters: [
+	                {left: "$$", right: "$$", display: true},
+	                {left: "$", right: "$", display: false}
+	            ]
+	        });
+	    });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+      mermaid.initialize({
+	        startOnLoad: true,
+	        theme: "base",
+	        themeCSS: "overflow: visible;",
+	        fontFamily: "inherit",
+	    });
+	    document.addEventListener("DOMContentLoaded", function() {
+	    	for (elem of document.getElementsByClassName("language-mermaid")) {
+	    		elem.classList.add("mermaid");
+	    	}
+	    });
+    </script>
+  </head>
+  <body>
+    <div id="content">
+      <h3>
+        <a href=/>Aaron Kriegman</a>
+        /
+      </h3>
+      <h1>Correspondence</h1>
+      <div class="byline">
+        <p>12 December 2023</p>
+      </div>
+      <p>$\gdef\coker{\operatorname{coker}} \gdef\im{\operatorname{im}}
+\gdef\coim{\operatorname{coim}}$</p>
+      <p>Functions are the most fundamental atom in the semantics of mathematics, the
+tool we use to express all other ideas. At least, this is how we are all taught
+to view mathematics. But I think things don&rsquo;t have to, and probably shouldn&rsquo;t,
+be this way. Functions allow us to write down well defined expressions, but
+there are many situations where functions are innelegant and we have to go to
+great lengths to get around their deficiencies. I think a more general notion of
+correspondence is needed. In this essay I will show some of the problems with
+functions, and then start to develop the ideas of an alternative theory. Note
+that I will assume an undergraduate level of familiarity with math in this
+essay.</p>
+      <p>A function can be thought of as a relation between two sets, called the domain
+and the range, where
+        <em>each thing in the domain is related to exactly one thing
+in the range.</em>
+        This allows us to write down unambiguous single valued
+expressions, but as we will see this condition is often unnatural. The most
+familiar examples of single valued functions being a burden are probably the
+square root (particularly the complex case) and the complex logarithm. Often
+when people talk about these functions they will start by specifying exactly
+which branch they are talking about, when really what they&rsquo;re saying applies
+equally well to all branches and this pedantry adds nothing to the conversation.
+Then in order to make sense of multivalued functions they will do grotesque
+things like define a sheaf.</p>
+      <p>My favorite example of the deficiency of functions is angles. We are taught that
+angles are real numbers which can naturally be added and subtracted, subject to
+an equivalence modulo some period. There are also hyperbolic angles which are
+less familiar, but are also conventionally thought of as real numbers that can
+be added and subtracted. However, if you dive deep enough into hyperbolic
+geometry, you will find that the space of hyperbolic angles naturally has a
+second sheet, that it should really be thought of as two copies of $\mathbb R$.
+That is, it&rsquo;s naturally shaped like a hyperbola. And the space of elliptic
+angles (ie angles) is naturally shaped like a circle because of that
+periodicity.</p>
+      <p>For these reasons I think that the spaces of elliptic and hyperbolic angles
+should instead be defined to be the groups $SO(2)$ and $SO(1,1)$ respectively.
+But then how do we conceptualize those real numbers that we usually use for
+angles? One could say that the word &ldquo;angle&rdquo;
+        <em>means</em>
+        those numbers, although for
+our purposes I&rsquo;ll take &ldquo;angles&rdquo; to be these underlying groups. The tool we are
+given to describe this type of correspondence is a homomorphism, which in this
+case will be between $\mathbb R$ and $SO( * )$ where $ * =2$ or $1,1$.</p>
+      <p><em>But which way does the homomorphism go?</em>
+        First let&rsquo;s try $\mathbb R \to SO( *
+)$. This is surjective but not injective in the elliptic case, and injective but
+not surjective in the hyperbolic case. The problem is this fails to describe the
+second leaf of the hyperbolic angles. If we go the other way $SO( * ) \to
+\mathbb R$, then we&rsquo;re surjective not injective in the hyperbolic case, and it
+just doesn&rsquo;t work in the elliptic case.</p>
+      <p>So what should we do? Do we say that elliptic angles have a homomorphism
+$\mathbb R \to SO(2)$ and hyperbolic angles go the other way $SO(1,1) \to
+\mathbb R$? I think it&rsquo;s time to introduce a more general notion of
+homomorphism, built on top of a more general notion of function.</p>
+      <h2 id="correspondences">Correspondences</h2>
+      <p>We&rsquo;ll call them correspondences. A correspondence is a relation such that if
+$a\sim x$, $b \sim x$, and $b \sim y$, then $a \sim y$. In other words, in the
+diagram</p>
+      <pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">flowchart LR
+  a &amp; b --- x &amp; y
+</code></pre><p>if three of the edges hold, then the fourth holds as well. Here these edges
+represent two elements being related.</p>
+      <p>The domain and range will be indicated like $f: A \leftrightarrow B$. Define the
+image and coimage by $\im f := f(A)$, $\coim f := f^-(B)$.</p>
+      <p>Note that correspondences are not exactly &ldquo;multivalued functions&rdquo;, as the images
+of two things in the domain cannot overlap, they must be the same or disjoint.
+Correspondences are geared towards &ldquo;equivalence-like&rdquo; relations. A &ldquo;multivalued
+function&rdquo; would just be any relation.</p>
+      <h3 id="lemma">Lemma</h3>
+      <p><em>A relation $\sim$ is a correspondence between two sets $A$ and $X$ iff it
+induces an equivalence relation on both the image and coimage, with a natural
+bijection between the equivalence classes.</em></p>
+      <h3 id="proof">Proof</h3>
+      <p>lol no</p>
+      <p>We will use the familiar notation from functions, but the meaning will now be
+somewhat different. If $f$ is our correspondence, then $f(a)$ can be thought of
+as the set of things corresponding to $a$, called the image of $a$. Or
+sometimes, a statement involving $f(a)$ may implicitly mean &ldquo;for any $x \in
+f(a)$.&rdquo; I&rsquo;m still working out the details for this part.</p>
+      <p>Now we can introduce our generalization of homomorphisms. A homospondence is a
+correspondence $f$ between groups satisfying $f(ab) = f(a)f(b)$ and $1 \in
+f(1)$. To be less ambiguous, if two of the statements $a \sim x$, $b \sim y$,
+and $ab \sim xy$ hold, then the third does as well, and $1 \sim 1$. Or, if we
+interpret $f(a)$ to mean the image of $a$, then $f(a)f(b)$ can be interpreted as
+a multiplication of sets, $AB := \{ab : a \in A, b \in B\}$.</p>
+      <p>As an aside, I hear people say thing like &ldquo;The cute way to show $aNa^- = N$ iff
+$aN = Na$ is to multiply on the right by $a^-$, but you can&rsquo;t actually do that,
+and the actual proof is more rigorous.&rdquo; But you actually can! Subset
+multiplication is associative, and if you treat elements as singletons then
+there&rsquo;s only one operation being used in expressions like $abAB$.</p>
+      <p>Now we can generalize the theory of homomorphisms. Define $\ker f := f^-(1)$,
+$\coker f := f(1)$, or equivalently $\ker f$ is all the things equivalent to $1$
+in the induced equivalence relation. Note that a homospondence is a homomorphism
+iff it&rsquo;s a function iff the cokernel and coimage are trivial.</p>
+      <h3 id="lemma-1">Lemma</h3>
+      <p><em>A homospondence is always $m$ to $n$, $\exists m, n$. In other words, $\#f(a)
+= n \ \forall a \in \coim f$, $\#f^-(x) = m \ \forall x \in \im f$, where $m,
+n$ depend only on $f$ and may be infinite.</em></p>
+      <p>What we really should be saying actually is that every preimage is a coset of
+the kernel and every image is a coset of the cokernel. This is a more powerful
+statement and is how we would prove the lemma.</p>
+      <h3 id="lemma-2">Lemma</h3>
+      <p><em>$\ker f$ is a normal subgroup of $\coim f$</em></p>
+      <p>Note that $\ker f$ is not generally a normal subgroup of $G$. Take for example
+the homospondence $f: S_3 \leftrightarrow \{1\}$ where $f^-(1) = S_2$. Also
+note that as an immediate corollary $\coker f \lhd \im f$.</p>
+      <h3 id="proof-1">Proof</h3>
+      <p>Take $a \in \coim f$, so $f(a) = x$. $a(\ker f)a^- = f^-(x)f^-(1)f^-(x^-) =
+f^-(x1x^-) = f^-(1) = \ker f$.</p>
+      <h3 id="theorem-first-isospondence-theorem">Theorem (First Isospondence Theorem)</h3>
+      <p>$$\frac{\coim f}{\ker f} = \frac{\im f}{\coker f}$$</p>
+      <p>We get the first isomorphism theorem as a special case when the coimage is the
+whole group and $\coker f = 1$, ie when $f$ is a homomorphism.</p>
+      <p>This theorem can be thought of as giving a sort of greatest common divisor of
+groups. That is, given a homospondence $f:A \leftrightarrow B$, there is a group
+$D$ with homomorphisms from $A$ and $B$ which commute with $f$, and such that
+whenever we have homomorphisms from $A$ and $B$ to some third group they factor
+through $D$.</p>
+      <p>I conjecture that there is also a sort of lowest common multiple of groups. That
+is, a group $M$ with homomorphisms to $A$ and $B$ which commute with $f$ and
+such that whenever a third group has homomorphisms to $A$ and $B$ they factor
+through $M$.</p>
+      <h2 id="exercise">Exercise</h2>
+      <p>Apply these ideas to the example of angles. The correspondence should be
+$\infty$ to $1$ in the elliptic case and $1$ to $2$ in the hyperbolic case, or
+vice versa. In each case either $f$ or $f^-$ is a function, but now we can have
+the correspondences pointing the same way.</p>
+    </div><div class="footer">
+      <hr>
+      Made with
+      <a href="https://gohugo.io/">Hugo</a>
+      and
+      <a href="https://hale.su/serenity.html">serenity.css</a>,
+  clone this site on
+      <a href="https://github.com/akriegman/aaron.kriegman.net">GitHub</a>.
+    </div>
+  </body></html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Percolation Experiment</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #1a1a1a;
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        #container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        #controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .control-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        input[type="range"] {
+            width: 200px;
+            margin-bottom: 5px;
+        }
+        .value-display {
+            font-size: 12px;
+            color: #ccc;
+        }
+        #stats {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            font-size: 12px;
+        }
+        button {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #357abd;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="controls">
+            <div class="control-group">
+                <label for="pSlider">Percolation Probability (p):</label>
+                <input type="range" id="pSlider" min="0" max="1" step="0.001" value="0.24">
+                <div class="value-display" id="pValue">0.24</div>
+            </div>
+            <div class="control-group">
+                <label for="qSlider">Body Selection Threshold (q):</label>
+                <input type="range" id="qSlider" min="0" max="1" step="0.01" value="0.1">
+                <div class="value-display" id="qValue">0.10</div>
+            </div>
+            <div class="control-group">
+                <label for="sizeSlider">Grid Size:</label>
+                <input type="range" id="sizeSlider" min="8" max="64" step="1" value="32">
+                <div class="value-display" id="sizeValue">32</div>
+            </div>
+            <button onclick="regenerateGrid()">Regenerate Random Values</button>
+        </div>
+        <div id="stats">
+            <div>Bodies Found: <span id="bodiesCount">0</span></div>
+            <div>Largest Body: <span id="largestBody">0</span> cells</div>
+            <div>Rendered Bodies: <span id="renderedBodies">0</span></div>
+            <div>Cells Rendered: <span id="cellsRendered">0</span></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        let scene, camera, renderer, controls;
+        let gridSize = 32;
+        let faceRandomValues = {};
+        let bodyMeshes = [];
+        
+        // Color palette for different bodies
+        const bodyColors = [
+            0xff6b6b, 0x4ecdc4, 0x45b7d1, 0xf9ca24, 0xf0932b,
+            0xeb4d4b, 0x6c5ce7, 0xa29bfe, 0xfd79a8, 0xfdcb6e,
+            0x00b894, 0x00cec9, 0x74b9ff, 0x0984e3, 0x6c5ce7,
+        ];
+
+        class SimpleOrbitControls {
+            constructor(camera, domElement) {
+                this.camera = camera;
+                this.domElement = domElement;
+                this.isDown = false;
+                this.mouseX = 0;
+                this.mouseY = 0;
+                this.phi = 0;
+                this.theta = 0;
+                this.radius = 40;
+                
+                this.domElement.addEventListener('mousedown', (e) => {
+                    this.isDown = true;
+                    this.mouseX = e.clientX;
+                    this.mouseY = e.clientY;
+                });
+                
+                this.domElement.addEventListener('mouseup', () => {
+                    this.isDown = false;
+                });
+                
+                this.domElement.addEventListener('mousemove', (e) => {
+                    if (!this.isDown) return;
+                    
+                    const deltaX = e.clientX - this.mouseX;
+                    const deltaY = e.clientY - this.mouseY;
+                    
+                    this.phi += deltaX * 0.01;
+                    this.theta += deltaY * 0.01;
+                    this.theta = Math.max(-Math.PI/2, Math.min(Math.PI/2, this.theta));
+                    
+                    this.mouseX = e.clientX;
+                    this.mouseY = e.clientY;
+                    
+                    this.update();
+                });
+                
+                this.domElement.addEventListener('wheel', (e) => {
+                    this.radius += e.deltaY * 0.01;
+                    this.radius = Math.max(5, Math.min(50, this.radius));
+                    this.update();
+                });
+                
+                this.update();
+            }
+            
+            update() {
+                this.camera.position.x = this.radius * Math.cos(this.theta) * Math.cos(this.phi);
+                this.camera.position.y = this.radius * Math.sin(this.theta);
+                this.camera.position.z = this.radius * Math.cos(this.theta) * Math.sin(this.phi);
+                this.camera.lookAt(0, 0, 0);
+            }
+        }
+
+        function init() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+            
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            document.getElementById('container').appendChild(renderer.domElement);
+            
+            controls = new SimpleOrbitControls(camera, renderer.domElement);
+            
+            generateFaceRandomValues();
+            updateVisualization();
+            
+            // Event listeners
+            document.getElementById('pSlider').addEventListener('input', updateVisualization);
+            document.getElementById('qSlider').addEventListener('input', updateVisualization);
+            document.getElementById('sizeSlider').addEventListener('input', (e) => {
+                gridSize = parseInt(e.target.value);
+                document.getElementById('sizeValue').textContent = gridSize;
+                generateFaceRandomValues();
+                updateVisualization();
+            });
+            
+            animate();
+        }
+
+        function generateFaceRandomValues() {
+            faceRandomValues = {};
+            
+            // Generate random values for all faces
+            for (let x = 0; x < gridSize; x++) {
+                for (let y = 0; y < gridSize; y++) {
+                    for (let z = 0; z < gridSize; z++) {
+                        // X-faces (between cells in X direction)
+                        if (x < gridSize - 1) {
+                            const key = `x_${x}_${y}_${z}`;
+                            faceRandomValues[key] = Math.random();
+                        }
+                        // Y-faces (between cells in Y direction)
+                        if (y < gridSize - 1) {
+                            const key = `y_${x}_${y}_${z}`;
+                            faceRandomValues[key] = Math.random();
+                        }
+                        // Z-faces (between cells in Z direction)
+                        if (z < gridSize - 1) {
+                            const key = `z_${x}_${y}_${z}`;
+                            faceRandomValues[key] = Math.random();
+                        }
+                    }
+                }
+            }
+        }
+
+        function regenerateGrid() {
+            generateFaceRandomValues();
+            updateVisualization();
+        }
+
+        function isFacePresent(type, x, y, z, p) {
+            const key = `${type}_${x}_${y}_${z}`;
+            return faceRandomValues[key] !== undefined && faceRandomValues[key] > p;
+        }
+
+        function findConnectedBodies(p) {
+            const visited = new Set();
+            const bodies = [];
+            
+            function cellKey(x, y, z) {
+                return `${x}_${y}_${z}`;
+            }
+            
+            function getNeighbors(x, y, z) {
+                const neighbors = [];
+                
+                // Check X direction
+                if (x > 0 && !isFacePresent('x', x-1, y, z, p)) {
+                    neighbors.push([x-1, y, z]);
+                }
+                if (x < gridSize - 1 && !isFacePresent('x', x, y, z, p)) {
+                    neighbors.push([x+1, y, z]);
+                }
+                
+                // Check Y direction
+                if (y > 0 && !isFacePresent('y', x, y-1, z, p)) {
+                    neighbors.push([x, y-1, z]);
+                }
+                if (y < gridSize - 1 && !isFacePresent('y', x, y, z, p)) {
+                    neighbors.push([x, y+1, z]);
+                }
+                
+                // Check Z direction
+                if (z > 0 && !isFacePresent('z', x, y, z-1, p)) {
+                    neighbors.push([x, y, z-1]);
+                }
+                if (z < gridSize - 1 && !isFacePresent('z', x, y, z, p)) {
+                    neighbors.push([x, y, z+1]);
+                }
+                
+                return neighbors;
+            }
+            
+            function dfs(startX, startY, startZ) {
+                const body = [];
+                const stack = [[startX, startY, startZ]];
+                
+                while (stack.length > 0) {
+                    const [x, y, z] = stack.pop();
+                    const key = cellKey(x, y, z);
+                    
+                    if (visited.has(key)) continue;
+                    visited.add(key);
+                    body.push([x, y, z]);
+                    
+                    const neighbors = getNeighbors(x, y, z);
+                    for (const [nx, ny, nz] of neighbors) {
+                        const nKey = cellKey(nx, ny, nz);
+                        if (!visited.has(nKey)) {
+                            stack.push([nx, ny, nz]);
+                        }
+                    }
+                }
+                
+                return body;
+            }
+            
+            // Find all connected bodies
+            for (let x = 0; x < gridSize; x++) {
+                for (let y = 0; y < gridSize; y++) {
+                    for (let z = 0; z < gridSize; z++) {
+                        const key = cellKey(x, y, z);
+                        if (!visited.has(key)) {
+                            const body = dfs(x, y, z);
+                            if (body.length > 0) {
+                                bodies.push(body);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            return bodies;
+        }
+
+        function selectTopBodies(bodies, q) {
+            // Sort bodies by size (largest first)
+            bodies.sort((a, b) => b.length - a.length);
+            
+            const totalCells = gridSize * gridSize * gridSize;
+            const targetCells = Math.ceil(totalCells * q);
+            
+            let selectedBodies = [];
+            let cellCount = 0;
+            
+            for (const body of bodies) {
+                selectedBodies.push(body);
+                cellCount += body.length;
+                
+                if (cellCount >= targetCells) {
+                    break;
+                }
+            }
+            
+            return selectedBodies;
+        }
+
+        function createBodyMesh(body, _colorIndex, p) {
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const indices = [];
+            const colors = [];
+            const normals = [];
+
+            // _colorIndex arg is unused, todo remove
+            const colorIndex = body[0][0] + 4 * body[0][1] + 7 * body[0][2];
+            const color = new THREE.Color(bodyColors[colorIndex % bodyColors.length]);
+            const cellSet = new Set(body.map(([x, y, z]) => `${x}_${y}_${z}`));
+            
+            let vertexIndex = 0;
+            
+            for (const [x, y, z] of body) {
+                const faces = [
+                    // Check each face and add if it should be rendered
+                    { dir: [1, 0, 0], check: () => x === gridSize - 1 || !cellSet.has(`${x+1}_${y}_${z}`) || isFacePresent('x', x, y, z, p) },
+                    { dir: [-1, 0, 0], check: () => x === 0 || !cellSet.has(`${x-1}_${y}_${z}`) || isFacePresent('x', x-1, y, z, p) },
+                    { dir: [0, 1, 0], check: () => y === gridSize - 1 || !cellSet.has(`${x}_${y+1}_${z}`) || isFacePresent('y', x, y, z, p) },
+                    { dir: [0, -1, 0], check: () => y === 0 || !cellSet.has(`${x}_${y-1}_${z}`) || isFacePresent('y', x, y-1, z, p) },
+                    { dir: [0, 0, 1], check: () => z === gridSize - 1 || !cellSet.has(`${x}_${y}_${z+1}`) || isFacePresent('z', x, y, z, p) },
+                    { dir: [0, 0, -1], check: () => z === 0 || !cellSet.has(`${x}_${y}_${z-1}`) || isFacePresent('z', x, y, z-1, p) }
+                ];
+                
+                for (const face of faces) {
+                    if (face.check()) {
+                        const [dx, dy, dz] = face.dir;
+                        const baseX = x - gridSize/2 + 0.5;
+                        const baseY = y - gridSize/2 + 0.5;
+                        const baseZ = z - gridSize/2 + 0.5;
+                        
+                        // Create face vertices
+                        let faceVertices;
+                        if (dx !== 0) { // X face
+                            const offset = dx > 0 ? 0.5 : -0.5;
+                            faceVertices = [
+                                baseX + offset, baseY - 0.5, baseZ - 0.5,
+                                baseX + offset, baseY + 0.5, baseZ - 0.5,
+                                baseX + offset, baseY + 0.5, baseZ + 0.5,
+                                baseX + offset, baseY - 0.5, baseZ + 0.5
+                            ];
+                        } else if (dy !== 0) { // Y face
+                            const offset = dy > 0 ? 0.5 : -0.5;
+                            faceVertices = [
+                                baseX - 0.5, baseY + offset, baseZ - 0.5,
+                                baseX - 0.5, baseY + offset, baseZ + 0.5,
+                                baseX + 0.5, baseY + offset, baseZ + 0.5,
+                                baseX + 0.5, baseY + offset, baseZ - 0.5,
+                            ];
+                        } else { // Z face
+                            const offset = dz > 0 ? 0.5 : -0.5;
+                            faceVertices = [
+                                baseX - 0.5, baseY - 0.5, baseZ + offset,
+                                baseX + 0.5, baseY - 0.5, baseZ + offset,
+                                baseX + 0.5, baseY + 0.5, baseZ + offset,
+                                baseX - 0.5, baseY + 0.5, baseZ + offset
+                            ];
+                        }
+                        
+                        vertices.push(...faceVertices);
+                        
+                        // Add indices for two triangles
+                        if (dx + dy + dz > 0) {
+	                        indices.push(
+	                            vertexIndex, vertexIndex + 1, vertexIndex + 2,
+	                            vertexIndex, vertexIndex + 2, vertexIndex + 3
+	                        );
+                        } else {
+                        	indices.push(
+	                            vertexIndex, vertexIndex + 2, vertexIndex + 1,
+	                            vertexIndex, vertexIndex + 3, vertexIndex + 2
+	                        );
+                        }
+                        
+                        // Add colors (slightly different shades for different orientations)
+                        const shadeMultiplier = dx !== 0 ? 1.0 : dy !== 0 ? 0.9 : 0.8;
+                        //const shadeMultiplier = 1.0
+                        for (let i = 0; i < 4; i++) {
+                            colors.push(color.r * shadeMultiplier, color.g * shadeMultiplier, color.b * shadeMultiplier);
+                        }
+                        
+                        // Add normals
+                        for (let i = 0; i < 4; i++) {
+                            normals.push(dx, dy, dz);
+                        }
+                        
+                        vertexIndex += 4;
+                    }
+                }
+            }
+            
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+            geometry.setIndex(indices);
+            
+            const material = new THREE.MeshBasicMaterial({ 
+                vertexColors: true,
+                transparent: true,
+                opacity: 1,
+            });
+            
+            return new THREE.Mesh(geometry, material);
+        }
+
+        function updateVisualization() {
+            const p = parseFloat(document.getElementById('pSlider').value);
+            const q = parseFloat(document.getElementById('qSlider').value);
+            
+            document.getElementById('pValue').textContent = p.toFixed(2);
+            document.getElementById('qValue').textContent = q.toFixed(2);
+            
+            // Clear existing meshes
+            bodyMeshes.forEach(mesh => scene.remove(mesh));
+            bodyMeshes = [];
+            
+            // Find connected bodies
+            const bodies = findConnectedBodies(p);
+            const selectedBodies = selectTopBodies(bodies, q);
+            
+            // Create meshes for selected bodies
+            selectedBodies.forEach((body, index) => {
+                const mesh = createBodyMesh(body, index, p);
+                scene.add(mesh);
+                bodyMeshes.push(mesh);
+            });
+            
+            // Update stats
+            document.getElementById('bodiesCount').textContent = bodies.length;
+            document.getElementById('largestBody').textContent = bodies.length > 0 ? bodies[0].length : 0;
+            document.getElementById('renderedBodies').textContent = selectedBodies.length;
+            document.getElementById('cellsRendered').textContent = selectedBodies.reduce((sum, body) => sum + body.length, 0);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+
+        function handleResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        window.addEventListener('resize', handleResize);
+        init();
+    </script>
+</body>
+</html>

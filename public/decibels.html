@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <title>aaah.run</title>
+    <link rel="stylesheet" href="/css/serenity.css" kind="text/css">
+    <link rel="stylesheet" href="/css/aaron.css" kind="text/css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css" integrity="sha384-bYdxxUwYipFNohQlHt0bjN/LCpueqWz13HufFEV1SUatKs1cm4L6fFgCi1jT643X" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js" integrity="sha384-Qsn9KnoKISj6dI8g7p1HBlNpVx0I8p1SvlwOldgi3IorMle61nQy4zEahWYtljaz" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+	        renderMathInElement(document.body, {
+	            delimiters: [
+	                {left: "$$", right: "$$", display: true},
+	                {left: "$", right: "$", display: false}
+	            ]
+	        });
+	    });
+    </script>
+  </head>
+  <body>
+    <div id="content">
+      <h3>
+        <a href=/>Aaron Kriegman</a>
+        /
+      </h3>
+      <h1>Decibels</h1>
+      <div class="byline">
+        <p>22 September 2023</p>
+      </div>
+      <p>In our number system, it is not very easy to quickly judge the magnitude of a
+number. The first thing you look for to get a feel for the size of a number is
+how many digits it has, and the second thing you look for is the first digit.
+Now as it turns out, for this purpose, different digits give you different
+amounts of information. If the first digit is a $1$, then your number could be
+as large as, say, $1999$, nearly twice the smallest it can be, $1000$. So you
+really need to look at the second digit to get a feel for the size of your
+number. On the other hand, if the first digit is a $9$, then the largest
+possible value is only $11\%$ larger than the smallest, so you already have a
+decent idea of the magnitude. This idea is often formalized as
+        <a href="https://en.wikipedia.org/wiki/Benford%27s_law">Benford&rsquo;s law</a>, which states
+that in typical data sets the first digits of the numbers are not evenly
+distributed, with $1$ appearing about $30\%$ of the time, $2$ appearing the
+second most, etc.</p>
+      <p>Quickly judging multiplication is not easy either, and is also dependent on the
+first digit. If I asked you what&rsquo;s $3950$ times $5050$, you could estimate that
+as $4000$ times $5000$, and tell me about $20$ million pretty easily. If I asked
+you what&rsquo;s $1250$ times $1580$, it&rsquo;s not so straightforward. Maybe you could
+estimate it as $1200 \cdot 1600$, but now you&rsquo;re doing multiplication with two
+significant figures, which is already much harder. If you just wanted to quickly
+estimate the answer, you might not bother in this case. In both these cases, the
+proportions of our two numbers are the same. That is to say, in a world where
+$3.16$ centimeters made an inch, you&rsquo;d be doing the first problem if you worked
+in centimeters and the second if you worked in inches. So these two
+multiplication problems are really the same problem with a different skin, yet
+one is harder for no good reason.</p>
+      <p>Enter decibels<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>. The decibel scale was originally meant for measuring the
+volume of sound, but it can be combined with other units<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>, or just used to
+represent plain numbers. The definition of the scale is that every $10$ decibels
+is a factor of $10$. So $20$ dB $= 100$, $-10$ dB $= 0.1$, $0$ dB $= 1$, etc.
+This means that $5$ dB is the square root of ten, $1$ dB is the tenth root of
+ten, etc. One incredibly useful coincidence is that $3$ dB is very close to $2$.
+This corresponds to the fact that $2^{10} = 1024 \approx 1000 = 10^3$.</p>
+      <p>Now let&rsquo;s revisit our previous examples but with decibels, and see if they&rsquo;re
+easier. $1000$ and $1999$ written in decibels are $30$ dB and $33$ dB. Before we
+needed to look at three pieces of information to get a feel for the magnitudes
+of these numbers: the number of digits, the first digit, and the second digit.
+But after expressing the numbers in decibels, we can get a good feel for their
+sizes with only two pieces of information: the tens place<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>
+        tells us the order
+of magnitude of the number, and the ones place tells us pretty well where the
+number falls within that order of magnitude. The numbers starting with $1$ get
+the $0$ to $3$ range of the ones place when written in decibels, so a
+proportional amount of our scale is dedicated to these numbers. Meanwhile
+$80,000$ is $49$ dB and $90,000$ is $49.5$ dB, so these numbers get squeezed
+into a smaller part of our scale, as they should since they are proportionally
+closer.</p>
+      <p>One of the key properties of decibels is that $x$ dB $\cdot\ y$ dB $= (x + y)$
+dB. That is, decibels turn multiplication into addition (and division into
+subtraction). So our previous problem, $3950 \cdot 5050$, becomes $36$ dB
+$\cdot\ 37$ dB, which is just $73$ dB $= 20$ million. About as easy as before.
+On the other hand, $1250 \cdot 1580$ becomes $31$ dB $\cdot\ 32$ dB $= 63$ dB $=
+2$ million, which is
+        <em>much</em>
+        easier than before. Importantly, it&rsquo;s the same
+difficulty as the first problem, as it should be.</p>
+      <h2 id="decibel-arithmetic-tips">Decibel arithmetic tips</h2>
+      <p>One time in a meeting in my first internship, we were discussing poker hand
+probabilities, when someone asked how many possible five card hands there are.
+Nobody knew the answer off the top of their head, so we just moved on. Sitting
+in that meeting, using decibels, I was able to calculate in my head that it was
+about $2$ million. I then refined my estimate to $2.5$ million, impressing all
+my coworkers when we looked it up and it was about $2.6$ million. Once you learn
+the tips in this section, you&rsquo;ll be able to do these kinds of calculations in
+your head too.</p>
+      <h3 id="converting-to-and-from-decibels">Converting to and from decibels</h3>
+      <p>As I mentioned before, the approximation $3$ dB $= 2$ is going to be our best
+friend. This tells us that $6$ dB $= 4$ and $9$ dB $= 8$. Working backwards from
+$10$ dB $= 10$, we get that $7$ dB $= 5,$ $4$ dB $= 2.5$, and $1$ dB $= 1.25$.</p>
+      <p>For $5$ dB, we can use the approximation $\sqrt{10} = \pi$ to get $5$ dB $=
+3.14,$ $8$ dB $= 6.28$, and $2$ dB $= 1.57$. This approximation is not the most
+accurate or the easiest to use, but it is easy to remember. Slightly more
+accurate is $5$ dB = $3 \frac16$ (That&rsquo;s an improper fraction! This is the first
+time I&rsquo;ve used those since elementary school.) which gives $2$ dB $= 1
+\frac7{12}$ and $8$ dB $= 6 \frac13$. A helpful way to remember the $2$ dB
+approximation is that $0$ dB, $1$ dB, $2$ dB, and $3$ dB break the interval from
+$1$ to $2$ into pieces of proportion $3$ to $4$ to $5$. The relative errors<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>
+        of all these estimates are all smaller than $-21$ dB, or $0.8\%$.</p>
+      <p>Then we can get an estimate for any whole number of decibels by just sliding
+over the decimal point. For example, $14$ dB $= 25$, and $-6$ dB $= 0.25$.</p>
+      <p>For values in between a whole number of decibels, the best way to convert is by
+interpolating linearly. For example, to convert $3$ into decibels, we recall
+that $4$ dB $= 2 \frac12$ and $5$ dB $= 3 \frac16$. $3$ is $3/4$ of the way from
+$2 \frac12$ to $3 \frac16$, so $3 = 4 \frac34$ dB.</p>
+      <p>Now as an example of how to convert the other way, say we want to find $2 \cdot
+3$ using decibels. That&rsquo;s $(3 + 4 \frac34)$ dB $= 7 \frac34$ dB. $7$ dB $= 5$
+and $8$ dB $= 6 \frac13$, so the answer is three quarters of the way from $5$ to
+$6 \frac13$ which is approximately $6$. This is a silly example, but it&rsquo;s cool
+that it gives us the right answer.</p>
+      <p>The relative error of this linear interpolation is also smaller than $-21$ dB,
+so as long as we&rsquo;re using the reference points mentioned above there&rsquo;s no reason
+to use a better interpolation method<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>.</p>
+      <h3 id="an-example">An example</h3>
+      <p>Now I&rsquo;ll show you how to use this to estimate the number of poker hands. There
+is a well known formula for the number of ways to choose $5$ cards out of a $52$
+card deck:</p>
+      <p>$$\frac{52 \cdot 51 \cdot 50 \cdot 49 \cdot 48}{5 \cdot 4 \cdot 3 \cdot 2 \cdot
+1}$$</p>
+      <p>This number is called &ldquo;$52$ choose $5$&rdquo;. We can approximate the numerator as
+$50^5$, especially since the factors are spread symmetrically around $50$, so
+the errors in this approximation will partially cancel<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>.</p>
+      <p>Now $50 = 17$ dB, so $50^5$ is $(17 \cdot 5)$ dB $= 85$ dB. The denominator
+comes out to $120$, which is close to $125 = 21$ dB. So our final answer is
+$(85 - 21)$ dB $= 64$ dB $= 2.5$ million. Pretty close to the actual answer of
+$2,598,960$! I originally estimated the denominator as $20$ dB, which is how I
+got my first estimate of $2$ million.</p>
+      <p>But we can do better. Instead of rounding $120$ to $125$, we can interpolate.
+$120$ is $4/5$ of the way from $100$ to $125$, so it&rsquo;s closer to $20.8$ dB. So
+our final answer is $64.2$ dB, which is $1/5$ of the way from $2.5$ million to
+$3 \frac16$ million, so about $2.63$ million. This is slightly closer to the
+answer and has a relative error of just over $-20$ dB. If you round this
+estimate to $2.6$ million you&rsquo;ll get lucky and get a lot closer.</p>
+      <h2 id="conclusion">Conclusion</h2>
+      <p>The first takeaway from all this is that when you encounter numbers in the wild
+and you need to multiply, divide, or compare their proportions, you may find it
+useful to convert them to decibels first. I find that it&rsquo;s often not worth it
+for one off multiplication or division, but for exponents, comparisons, and
+products of many numbers, this conversion can be very helpful.</p>
+      <p>But the bigger point I want to make is that I think we should start presenting
+many numbers as decibels in the first place. As discussed, our number system is
+biased towards certain digits, and makes common operations more difficult than
+they have to be. If we started using decibels in news articles, on nutrition
+labels, etc., it would be easier to intuitively judge numbers. Unfortunately,
+this would require getting our entire society to become literate in decibels,
+which would not be worth it for this marginal improvement. So it seems that this
+system of approximations that I&rsquo;ve come up with will be relegated to the realm
+of party tricks and occasionally useful tools for the foreseeable future. Maybe
+one day this could be incorporated into a school curriculum, but that would
+probably be a bad choice because there&rsquo;re more important things for kids to
+learn in math class.</p>
+      <p>I would like to point out that not all numbers are better in decibel form. Some
+numbers are meant to be multiplied, divided, and compared using ratios, and for
+those numbers we should use decibels. Other numbers are meant to be added,
+subtracted, or compared using differences, and for these numbers it would not be
+helpful to use decibels.</p>
+      <p>Lastly, I&rsquo;ll mention that decibels are what is known as a logarithmic scale.
+I&rsquo;ve avoided using this word because I don&rsquo;t want to scare people away. I think
+that the content in this post is actually pretty accessible, but if I&rsquo;m not
+careful then people will get intimidated and their eyes will glaze over.</p>
+      <div class="footnotes" role="doc-endnotes">
+        <hr>
+        <ol>
+          <li id="fn:1">
+            <p>This solution didn&rsquo;t fall out of the sky of course. I got the inspiration
+from the idle game Antimatter Dimensions, which has an option to display all
+numbers in the game using exponential notation, which is like scientific
+notation but instead of $4$e$3$ for example you would write e$3.6$. I liked this
+a lot and started thinking about how great it would be if everyone started using
+this all the time. I also started coming up with some useful approximations for
+converting to and from exponential notation. I started to notice that it&rsquo;s
+really useful to work in tenths of an order of magnitude, and hey, maybe we
+should have a name for those. I later found out that a name already exists,
+they&rsquo;re called decibels.</p>
+            <p>Another scale that came about in a similar way is the twelve note musical
+scale. This scale divides each factor of two into twelve equal pieces called
+semitones, so each semitone is about a quarter of a decibel. Four semitones
+is very close to $5/4$ (relative error below $-21$ dB) and seven semitones
+is extremely close to $3/2$ (relative error below $-29$ dB). These strong
+approximations of simple rational numbers are the essential reason why the
+twelve note musical scale is good. If you wanted to, you could make music
+using quarters of decibels instead of semitones.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+          </li>
+          <li id="fn:2">
+            <p>Decibel milliwatts (dBmW) are often used to measure wifi signal strength.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+          </li>
+          <li id="fn:3">
+            <p>For numbers larger than $99$ dB or smaller than $-99$ dB, you also need to
+look at the higher places to get the order of magnitude. But at that point
+counting the digits isn&rsquo;t very useful anyways.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+          </li>
+          <li id="fn:4">
+            <p>The relative error of an approximation $x + E$ to a value $x$ is defined
+as the absolute error $E$ scaled relative to the value, ie $\frac Ex$. This is
+approximately equal to $\frac E{x+E}$ when the relative error is small, so it
+doesn&rsquo;t matter whether you scale by the value or the approximation. The relative
+error has the advantage of being scale invariant, and in many situations is the
+most natural way to express error.</p>
+            <!-- raw HTML omitted -->
+            <!-- raw HTML omitted -->
+            <p>The other method that comes to mind as a potentially more natural way to express the error
+is to just give the ratio of the approximation to the value.
+As discussed above, ratios like this are best expressed using a scale like
+decibels, and as it turns out, for close approximations, the ratio in decibels
+is proportional to the relative error. So we may as well just use the relative error.&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+          </li>
+          <li id="fn:5">
+            <p>The relative error of each exponential approximation is proportional to
+the absolute error of the inverse logarithmic approximation.&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+          </li>
+          <li id="fn:6">
+            <p>The relative error away from $50$ for each factor is one or two parts in
+$50$. The first order error of $51$ will cancel with $49$, and $52$ with $48$,
+leaving us with only the second order error. Therefore $50^5$ approximates the
+numerator with relative error on the order of $(2/50)^2$, or about $(2 \cdot
+(3 - 17))$ dB $ = -28$ dB.&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+          </li>
+        </ol>
+      </div>
+    </div><div class="footer">
+      <hr>
+      Made with
+      <a href="https://gohugo.io/">Hugo</a>
+      and
+      <a href="https://hale.su/serenity.html">serenity.css</a>,
+  clone this site on
+      <a href="https://github.com/akriegman/aaron.kriegman.net">GitHub</a>.
+    </div>
+  </body></html>
