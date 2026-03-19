@@ -1,0 +1,30 @@
+html {
+    /* this puts short pages in the upper middle, and seems to
+    do nothing for long pages, so we'll keep it for all for now. */
+    display: table;
+    margin: auto;
+    height: 60%;
+}
+
+body {
+    display: table-cell;
+    vertical-align: middle;
+    font-family: Times New Roman;
+    max-width: 40em;
+    padding: 1em;
+}
+
+h1 {
+    font-weight: normal;
+    text-align: center;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background: black;
+}
+
+ul {
+    list-style-type: "»   ";
+}
