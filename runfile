@@ -9,3 +9,70 @@ function pub {
 function run {
   python -m http.server
 }
+
+#=== notion sync ===#
+
+source .env
+
+function notion {
+  curl -sf "https://api.notion.com/v1/$1" \
+    -H "Authorization: Bearer $NOTION_TOKEN" \
+    -H "Notion-Version: 2026-03-11"
+}
+
+function pull {
+  local path="$1"
+  if [ -z "$path" ]; then
+    echo "Usage: pull <path/name>"
+    return 1
+  fi
+
+  IFS='/' read -ra segments <<< "$path"
+
+  # Navigate Notion page hierarchy to find the page
+  local id="$NOTION_ROOT"
+  local title=""
+  for seg in "${segments[@]}"; do
+    local children
+    children=$(notion "blocks/$id/children") || return 1
+    id=$(echo "$children" | jq -r --arg seg "$seg" '.results[] | select(.type == "child_page" and .child_page.title == $seg) | .id')
+    title="$seg"
+    if [ -z "$id" ]; then
+      echo "Not found: $seg"
+      echo "$children" | jq -r '.results[] | select(.type == "child_page") | .child_page.title'
+      return 1
+    fi
+  done
+
+  # Fetch created date
+  local created
+  created=$(notion "pages/$id" | jq -r '.created_time')
+  local date_fmt
+  date_fmt=$(date -j -f "%Y-%m-%dT%H:%M:%S" "${created%%.*}" "+%-d %B %Y" 2>/dev/null)
+
+  # Fetch markdown and convert to HTML
+  local body
+  body=$(notion "pages/$id/markdown" | jq -r '.markdown' | multimarkdown)
+
+  # Build breadcrumb
+  local breadcrumb='<a href=/>Aaron Kriegman</a> /'
+  for ((i=0; i<${#segments[@]}-1; i++)); do
+    local href="/"
+    for ((j=0; j<=i; j++)); do href+="${segments[$j]}/"; done
+    breadcrumb+=$'\n        '"<a href=\"$href\">${segments[$i]}</a> /"
+  done
+
+  # Output path: name/index.html if name/ exists, else name.html
+  local outfile
+  if [ -d "public/$path" ]; then
+    outfile="public/$path/index.html"
+  else
+    local dir="public/${path%/*}"
+    [ "$dir" != "public/$path" ] && mkdir -p "$dir"
+    outfile="public/$path.html"
+  fi
+
+  BREADCRUMB="$breadcrumb" TITLE="$title" DATE="$date_fmt" BODY="$body" \
+    gomplate -f template.html -o "$outfile"
+  echo "Wrote $outfile"
+}
