@@ -7,16 +7,16 @@ function pub {
 }
 
 function run {
-  python -m http.server
+  cd public && python -m http.server
 }
 
 #=== notion sync ===#
 
-source .env
+set -a; source .env; set +a
 
 function notion {
   curl -sf "https://api.notion.com/v1/$1" \
-    -H "Authorization: Bearer $NOTION_TOKEN" \
+    -H "Authorization: Bearer $NTN_TOKEN" \
     -H "Notion-Version: 2026-03-11"
 }
 
@@ -28,15 +28,14 @@ function pull {
   fi
 
   IFS='/' read -ra segments <<< "$path"
+  local title="${segments[${#segments[@]}-1]}"
 
   # Navigate Notion page hierarchy to find the page
-  local id="$NOTION_ROOT"
-  local title=""
+  local id="$NTN_ROOT"
   for seg in "${segments[@]}"; do
     local children
     children=$(notion "blocks/$id/children") || return 1
     id=$(echo "$children" | jq -r --arg seg "$seg" '.results[] | select(.type == "child_page" and .child_page.title == $seg) | .id')
-    title="$seg"
     if [ -z "$id" ]; then
       echo "Not found: $seg"
       echo "$children" | jq -r '.results[] | select(.type == "child_page") | .child_page.title'
@@ -50,9 +49,16 @@ function pull {
   local date_fmt
   date_fmt=$(date -j -f "%Y-%m-%dT%H:%M:%S" "${created%%.*}" "+%-d %B %Y" 2>/dev/null)
 
-  # Fetch markdown and convert to HTML
+  # Fetch markdown via notion-to-md and convert to HTML
   local body
-  body=$(notion "pages/$id/markdown" | jq -r '.markdown' | multimarkdown)
+  body=$(deno run --allow-env --allow-net -q - <<'DENO_EOF' "$id" | tee /dev/tty | multimarkdown
+import { Client } from "npm:@notionhq/client";
+import { NotionToMarkdown } from "npm:notion-to-md";
+const n2m = new NotionToMarkdown({ notionClient: new Client({ auth: Deno.env.get("NTN_TOKEN") }) });
+const blocks = await n2m.pageToMarkdown(Deno.args[0]);
+Deno.stdout.writeSync(new TextEncoder().encode(n2m.toMarkdownString(blocks).parent));
+DENO_EOF
+  )
 
   # Build breadcrumb
   local breadcrumb='<a href=/>Aaron Kriegman</a> /'
