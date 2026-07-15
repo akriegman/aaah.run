@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+    >
+    <title>aaah.run</title>
+    <link rel="stylesheet" href="/css/serenity.css" kind="text/css">
+    <link rel="stylesheet" href="/css/aaron.css" kind="text/css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css"
+      integrity="sha384-bYdxxUwYipFNohQlHt0bjN/LCpueqWz13HufFEV1SUatKs1cm4L6fFgCi1jT643X"
+      crossorigin="anonymous"
+    >
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js"
+      integrity="sha384-Qsn9KnoKISj6dI8g7p1HBlNpVx0I8p1SvlwOldgi3IorMle61nQy4zEahWYtljaz"
+      crossorigin="anonymous"
+    >
+    </script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js"
+      integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+      crossorigin="anonymous"
+    >
+    </script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\(", right: "\\)", display: false },
+        ],
+      });
+    });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js">
+    </script>
+    <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "base",
+      themeCSS: "overflow: visible;",
+      fontFamily: "inherit",
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+      for (elem of document.getElementsByClassName("language-mermaid")) {
+        elem.classList.add("mermaid");
+      }
+    });
+    </script>
+  </head>
+  <body>
+    <div id="content">
+      <h3>
+        <a href=/>Aaron Kriegman</a> /
+        <a href="/drafts/">drafts</a> /
+      </h3>
+      <h1>whitepaper</h1>
+      <div class="byline">
+        <p>11 July 2026</p>
+      </div>
+      <h1 id="introduction">Introduction</h1>
+
+<p>Forum has multiple pieces which aim to solve multiple problems, but they seem to belong together.</p>
+
+<p><strong>Problem 1:</strong> we still have to separately create an account and sign in to every service we use. SSO makes this better but still has non-zero friction, as well as the risk of Google ruining your life by banning you.</p>
+
+<p><strong>Solution 1:</strong> we create an app called Forum which can show you arbitrary content like a web browser, but where you sign in once to the app as a whole. We will have a strict policy of forgiveness: platform wide banning will not even be a feature we support, except where required by law.</p>
+
+<p><strong>Problem 2:</strong> we still have to redundantly fill in the same data to different apps. Autofill is a hacky solution for a couple categories of data.</p>
+
+<p><strong>Solution 2:</strong> we have one central database for every app in our ecosystem. Every app can access your data from every other app, with your permission. We have a policy that if an app uses any data from our ecosystem, then any data it stores it has to store in our database, or at least a copy.</p>
+
+<p><strong>Problem 3:</strong> the things you can do with content are defined by that content. If there&#8217;s a comment button you can comment, if there&#8217;s not you can&#8217;t. Because of this problem, every app is now hamfisting AI features where they don&#8217;t belong. Browsers add a few tools across all websites, ie bookmarks, translation, text selection, but these are not general enough.</p>
+
+<p><strong>Solution 3:</strong> we add a “use” tray accessible from the bottom of the screen, where you can browse ways to interact with the current page.</p>
+
+<p><strong>Problem 4:</strong> all content curation goes through centralized middlemen, requiring users to solve a multi-armed bandit problem, and creating underserved frontend lock-in. There is an argument to be made that this is an obstruction to the end state of intelligence, that constant reselection of your information source at the highest level will outperform any single information provider.</p>
+
+<p><strong>Theorem 1:</strong> if a system would increase the total productivity in the world, then it can be implemented profitably and stably in a free market.</p>
+
+<p><strong>Problem 5:</strong> we are trapped in a local optimum where social apps will maximize your session length so they can show you more ads, which they get paid for per impression. This is not the best use of anyone&#8217;s time, so by theorem 1 better is possible.</p>
+
+<p><strong>Problem 6:</strong> there are countless ways to invest in products but no ways to invest in people. This means that we have highly motivated actors advocating for the success of their products, but nobody putting that same energy into advocating for your success. Further, if someone were to advocate for your success with that same energy, it would improve your productivity, and therefore by theorem 1 we can make this happen<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote"><sup>1</sup></a>.</p>
+
+<p><strong>Solution 4:</strong> we create an attention market. Users submit (possibly empty) queries, and third parties bid on the opportunity to answer. The winner of the auction is required to invest in the future value of that user’s attention. This incentive structure, described in more detail in section 2, appears to be the right way to show people interesting and even enriching content without a centralized algorithm, and creates the opportunity and incentive for third parties to keep finding ever better uses for your time.</p>
+
+<div class="footnotes">
+<hr />
+<ol>
+
+<li id="fn:1">
+<p>One solution that has been proposed is personal tax assets, where the government allows you to purchase a share of the future tax revenue from a given individual. This is probably a good idea, even if this need is filled by the private market, but it is unlikely to ever happen because it would be so drastic. Other solutions usually involve income share agreements, which are unlikely to catch on because they&#8217;re a big, risky commitment for individuals to take on. <a href="#fnref:1" title="return to body" class="reversefootnote">&#160;&#8617;&#xfe0e;</a></p>
+</li>
+
+</ol>
+</div>
+    </div>
+    <div class="footer">
+      <hr>
+      Made with
+      <a href="https://hale.su/serenity.html">serenity.css</a>.
+    </div>
+  </body>
+</html>
