@@ -80,7 +80,7 @@
 
 <p>Fractions, radicals, and exponents all interact with each other in different ways, and it can be a tedious to juggle them all around. If you just use exponents, then the rules become far more uniform. Fractions and radicals are just special notation that you get to use when your exponent happens to be <span class="math">\(-\)</span> or <span class="math">\(1/n\)</span>, and if you are not so lucky to be on that blessed path then you have to fall back to the general case and use exponents anyways. It’s better to just not have a special case to begin with.</p>
 
-<p>But if you took this convention to it’s extreme then you’d end up writing things like <span class="math">\(2^{-2^-}\)</span>, which is a new kind of confusing. I think the right compromise is to use shorthand like <span class="math">\(/\)</span> in tight spaces like exponents or matrix entries, and use <span class="math">\(2^-\)</span> otherwise. Or maybe we should just get comfortable with exponent towers.</p>
+<p>But if you took this convention to its extreme then you’d end up writing things like <span class="math">\(2^{-2^-}\)</span>. I think the right compromise is to use shorthand like <span class="math">\(/\)</span> in tight spaces like exponents or matrix entries, and use <span class="math">\(2^-\)</span> otherwise. But maybe it’s better to get comfortable with exponent towers.</p>
 
 <p>One reason why fractions and radicals are more convenient than exponents is that they also do grouping. In many cases if you want to switch them out for exponents then you have to add parentheses to do the grouping instead. For example, the quadratic formula becomes</p>
 
@@ -88,13 +88,13 @@
 (-b\pm(b^2&#8211;4ac)^/)(2a)^-
 $$</p>
 
-<p>I’ve written before about how much <a href="/struck">I hate parentheses</a>. In particular, to handwrite the above expression you have to either plan ahead or backtrack, and you shouldn’t have to do that. The best alternative I have found is to use overparentheses:</p>
+<p>I’ve written before about how much <a href="/struck">I hate parentheses</a>. To handwrite the above expression you have to either plan ahead or backtrack, and you shouldn’t have to do that. The best alternative I have found is to use overparentheses:</p>
 
 <p>$$
 \overgroup{-b \pm \overgroup{b^2&#8211;4ac}^/&nbsp;}&nbsp;\overgroup{2a}^-
 $$</p>
 
-<p>I’m using <code>\overgroup</code> because it’s available in Katex, but an arc shape might be better. I had to add some <code>\</code>s to make the spacing look right. Newton used a similar notation <span class="math">\(\angl{abc}\)</span>. That might be the move tbh<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote"><sup>1</sup></a>, although it looks like the Katex version <code>\angl</code> is somewhat limited, it doesn’t let you put exponents inside.</p>
+<p>I’m using <code>\overgroup</code> because it’s available in Katex, but an arc shape might be better. Newton used a similar notation <span class="math">\(\angl{4ac}\)</span>, which might be the move tbh<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote"><sup>1</sup></a>. But it looks like the Katex version <code>\angl</code> is somewhat limited, it doesn’t let you put exponents inside.</p>
 
 <p>It is standard to write expressions in order from simple to complex. Eg we write <span class="math">\(-2x\)</span> and not <span class="math">\(x2(-)\)</span>. However there are some good reasons to write the complex parts first. The complex parts often contextualize the simple parts. It is also often easiest to figure out the simple parts last. Often you will have an expression with three or four factors of <span class="math">\(-\)</span>, with each factor coming from some other part of the expression, so if you want to figure out the sign before writing down the rest of the expression then you have to hold the whole expression in your head.</p>
 
