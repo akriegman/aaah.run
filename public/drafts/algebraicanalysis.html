@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+    >
+    <title>aaah.run</title>
+    <link rel="stylesheet" href="/css/serenity.css" kind="text/css">
+    <link rel="stylesheet" href="/css/aaron.css" kind="text/css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css"
+      integrity="sha384-bYdxxUwYipFNohQlHt0bjN/LCpueqWz13HufFEV1SUatKs1cm4L6fFgCi1jT643X"
+      crossorigin="anonymous"
+    >
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js"
+      integrity="sha384-Qsn9KnoKISj6dI8g7p1HBlNpVx0I8p1SvlwOldgi3IorMle61nQy4zEahWYtljaz"
+      crossorigin="anonymous"
+    >
+    </script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js"
+      integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+      crossorigin="anonymous"
+    >
+    </script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\(", right: "\\)", display: false },
+        ],
+      });
+    });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js">
+    </script>
+    <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "base",
+      themeCSS: "overflow: visible;",
+      fontFamily: "inherit",
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+      for (elem of document.getElementsByClassName("language-mermaid")) {
+        elem.classList.add("mermaid");
+      }
+    });
+    </script>
+  </head>
+  <body>
+    <div id="content">
+      <h3>
+        <a href=/>Aaron Kriegman</a> /
+        <a href="/drafts/">drafts</a> /
+      </h3>
+      <h1>algebraicanalysis</h1>
+      <div class="byline">
+        <p>29 July 2026</p>
+      </div>
+      <h1 id="algebraicanalysis">Algebraic Analysis</h1>
+
+<p><span class="math">\(\gdef\Fin{\operatorname{Fin}}\)</span></p>
+
+<p>$$
+\gdef\Fin{\operatorname{Fin}}
+\gdef\Inf{\operatorname{Inf}}
+\gdef\N{\mathbb{N}}
+\gdef\Z{\mathbb{Z}}
+\gdef\Q{\mathbb{Q}}
+\gdef\R{\mathbb{R}}
+$$</p>
+
+<p>Recently I was looking for a calculus textbook to recommend to my little cousins. I asked Chat<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote"><sup>1</sup></a>, “Is there like a ‘Calculus Done Right’ or ‘Feynman Lectures on Calculus’ type of deal?” The first option it gave me was Spivak, which is great, but the second option was Keisler’s “Elementary Calculus: An Infinitesimal Approach,” which uses Abraham Robinson’s <em>non-standard analysis</em>. Instead of the real numbers the book uses the <em>hyperreal numbers</em>, an extension of the reals that also contains infinitesimal and infinite numbers. This is what I recommended to my cousins.</p>
+
+<p>The hyperreal numbers satisfy the <em>transfer principle</em>, which says that any statement that applies to the real numbers applies to the hyperreals too. When I first read this I thought Keisler was just making stuff up, but after looking into it more I found out that …</p>
+
+<p>There’s something redundant about the hyperreals though. The reals were first constructed from the rationals, back when there was doubt as to whether the reals exist, by taking equivalence classes of sequences of rationals that look like they’re converging to the same point. The hyperreals are constructed from the reals by again taking equivalence classes of sequences of numbers. The relation is different this time though: the sequences of real numbers form a ring, and we take a quotient by a maximal ideal. This is called the ultrapower, and it turns out to be the right way to construct an object satisfying the transfer principle. Both of these constructions give us the continuity we need to make calculus rigorous, but in different ways. Robinson and Keisler straddle both worlds, effectively focusing on bridging this gap.</p>
+
+<p>In my opinion, we should take this alternative approach to continuity seriously. Instead of using the reals or the hyperreals, we should use the hyperrationals. The whole point of the ultrapower is that we take one generalized limit one time, and then we never have to take another limit again. The hyperrationals don’t contain numbers like <span class="math">\(\sqrt{2}\)</span> or <span class="math">\(\pi\)</span>, but they do contain numbers infinitely close to these. This means that we’ll have to live with some ambiguity and work mostly with equations that only hold up to an infinitesimal, but as we will see this allows us to replace all the machinery of analysis with some very satisfying ring theory, that looks a lot like modular arithmetic. There’s an argument to be made that this is a more honest approach to irrational numbers, since you can never know <span class="math">\(\sqrt{2}\)</span> in it’s entirety, you can only know successively better rational approximations of it.</p>
+
+<p>Some definitions, notation, and basic properties:</p>
+
+<ul>
+<li><span class="math">\(x \in *\Q\)</span> is infinite if <span class="math">\(|x|\)</span> is greater than all rationals</li>
+<li><span class="math">\(x \in *\Q\)</span> is finite if it is not infinite</li>
+<li><span class="math">\(\Fin*\Q\)</span>, or just <span class="math">\(\Fin\)</span> for short, is the finite hyperrationals. <span class="math">\(\Fin\)</span> is a ring.</li>
+<li><span class="math">\(x \in *\Q\)</span> is infinitesimal if <span class="math">\(|x|\)</span> is less than all positive rationals</li>
+<li><span class="math">\(\Inf*\Q\)</span>, or just <span class="math">\(\Inf\)</span> for short, is the infinitesimal hyperrationals. <span class="math">\(\Inf\)</span> is the unique maximal ideal of <span class="math">\(\Fin\)</span>.</li>
+<li><span class="math">\(a \approx b\)</span>, read “$a$ almost equals $b$”, means <span class="math">\(a-b \in \Inf\)</span></li>
+<li>For any term <span class="math">\(S\)</span>, “almost $S$” is the term you get by replacing every occurence of <span class="math">\(=\)</span> with <span class="math">\(\approx\)</span>. Almost <span class="math">\(\geq\)</span> and almost <span class="math">\(\leq\)</span> will be written <span class="math">\(\gtrsim\)</span> and <span class="math">\(\lesssim\)</span>.</li>
+<li>We will use sets and multivalued expressions in our equations. If <span class="math">\(P(x)\)</span> is a predicate and <span class="math">\(A\)</span> is a set, then by <span class="math">\(P(A)\)</span> we will usually mean <span class="math">\(\exists a\in A, P(a)\)</span> but sometimes <span class="math">\(\forall a\in A, P(a)\)</span>, and when we want to be clear we will add a quantifier annotation like <span class="math">\(a = b + E^\exists\)</span>. Beware that we will also have ordinary equations between sets<a href="#fn:2" id="fnref:2" title="see footnote" class="footnote"><sup>2</sup></a>.</li>
+</ul>
+
+<ul>
+<li>Recall that a <span class="math">\(\Fin\)</span>-submodule of <span class="math">\(*\Q\)</span>, aka a fractional ideal of <span class="math">\(\Fin\)</span>, is a subset of <span class="math">\(*\Q\)</span> closed under multiplication by <span class="math">\(\Fin\)</span> and addition with itself. In this case, closure under multiplication by <span class="math">\(\Fin\)</span> implies closure under addition, so we can forget about the second condition. Define a <em>modulus</em> to be a non-zero <span class="math">\(\Fin\)</span>-submodule. Containment is a total ordering on the moduli, and each modulus is convex.</li>
+<li><span class="math">\(O(x)\)</span> is the modulus generated by <span class="math">\(x\)</span>, ie <span class="math">\(x \cdot \Fin\)</span>. This way we can be cute and write things like <span class="math">\(f(x+dx) = f(x) + O(dx)\)</span>.</li>
+<li><span class="math">\(o(x)\)</span> is the modulus <span class="math">\(x \cdot \Inf\)</span></li>
+<li>We will use the linear topology, so the open sets on <span class="math">\(*\Q\)</span> are the cosets of the moduli, and unions thereof.</li>
+<li>For any function <span class="math">\(f(x)\)</span>, we will take <span class="math">\(df\)</span>, called the differential of <span class="math">\(f\)</span>, to be the function of two variables <span class="math">\(df(x, dx) = f(x+dx)-f(x)\)</span>. We will often elide the second argument or both.</li>
+<li>This subject is usually called “Non-Standard Analysis”, but I won’t be using that term because I think this should be standard. I think “Algebraic Analysis” is probably the right name, because instead of using infinitary methods (Analysis) we’re using finitary methods (Algebra) on infinitary objects.</li>
+</ul>
+
+<p>The quotient <span class="math">\(\Fin/\Inf\)</span> is <span class="math">\(\R\)</span>, and the quotient map is the analogue of Robinson’s standard part map. Lots of fun number theoretic and profinite objects arise as various quotients of various subsets of the hyperrationals. For instance if we used a different valuation to define <span class="math">\(\Fin\)</span> and <span class="math">\(\Inf\)</span> then <span class="math">\(\Fin/\Inf\)</span> would be the <span class="math">\(p\)</span>-adics or the <span class="math">\(P\)</span>-adics, a field with characteristic 0 but non-zero hypercharacteristic. The profinite integers are <span class="math">\(*\Z / \{N\in *\Z : n|N \forall n \in \Z\}\)</span>.</p>
+
+<h2 id="completeness">Completeness</h2>
+
+<p>Since our choice of topology feels a little strange, we will justify it by proving that <span class="math">\(f(x)=x^2\)</span> is continuous. We must show that for any modulus coset <span class="math">\(y+E\)</span>, the preimage <span class="math">\(f^{-1}(y+E)\)</span> is a union of modulus cosets. Since <span class="math">\(y+E\)</span> is convex, we can break this into three cases:</p>
+
+<ul>
+<li><span class="math">\(0 &gt; y+E\)</span>: Squares are positive so <span class="math">\(f^{-1}(y+E)\)</span> is empty.</li>
+<li><span class="math">\(0 \in y+E\)</span>: Wlog <span class="math">\(y=0\)</span>. We will show that <span class="math">\(D=f^{-1}(E)\)</span> is a modulus. Take <span class="math">\(\delta \in E \cap \Fin,\ \neq 0\)</span>, then <span class="math">\(\delta^2 \in E\)</span>, so <span class="math">\(D\)</span> is non-zero. If <span class="math">\(\lambda \in\Fin\)</span> and <span class="math">\(\delta\in D\)</span>, then <span class="math">\(\lambda^2\delta^2 \in E \implies \lambda\delta \in D\)</span>.</li>
+<li><span class="math">\(0 &lt; y+E\)</span>: If <span class="math">\(\exists x \in f^{-1}(y+E)\)</span>, wlog take <span class="math">\(x &gt; 0\)</span>, and take <span class="math">\(D = \{\delta : f(x+\delta) \in y+E, x + \delta &gt; 0\}\)</span>, so that <span class="math">\(f^{-1}(y+E) = -x-D \cup x+D\)</span>. (Our next theorem will show that there is such an <span class="math">\(x\)</span>, but for this proof it is ok if there isn’t.) We will show that <span class="math">\(D = \frac 1x E\)</span>, which is a modulus. If <span class="math">\(\delta \in D\)</span>, then <span class="math">\(df = 2x\delta(1 + \frac{\delta}{2x}) \in E\)</span>, and <span class="math">\(1 + \frac{\delta}{2x} &gt; \frac12 \implies x\delta \in E\)</span>. Conversely take <span class="math">\(\delta \in \frac 1x E\)</span>. We must have <span class="math">\(\delta \in o(x)\)</span>, otherwise <span class="math">\(-x^2 = -(\frac x \delta)x\delta \in E \implies 0 \in y+E\)</span>. So <span class="math">\(df = 2x\delta(1 + o(1)) \in E\)</span> and <span class="math">\(x + \delta = x(1+o(1)) &gt; 0\)</span>, <span class="math">\(\implies \delta \in D\)</span>. <span class="math">\(\tag*{\square}\)</span></li>
+</ul>
+
+<p>Note that in this topology there are functions which are continuous but one would not describe as continuous, eg</p>
+
+<p>$$
+f(x) = \begin{cases}0 &amp; x &lt; 0 \text{ or } x \in \Inf &amp;&amp; 1 &amp; x &gt; 0 \text{ and } x \not\in \Inf\end{cases}
+$$</p>
+
+<p>However we will show that continuous <em>internal</em> functions behave as we would expect.</p>
+
+<p><strong>Theorem:</strong> (Almost Completeness) Let <span class="math">\(A \subset *\Q\)</span> be a nonempty internal set with an upper bound. Then for every modulus <span class="math">\(E\)</span>, <span class="math">\(A\)</span> has an <em>almost supremum</em> <span class="math">\(s\)</span>, meaning</p>
+
+<p>$$
+\begin{align*}
+A^\forall &lt; s + E^\exists \
+b \geq A^\forall \implies b &gt; s + E^\exists
+\end{align*}
+$$</p>
+
+<p>In other words, <span class="math">\(*\Q / E\)</span> is “internally complete”<a href="#fn:3" id="fnref:3" title="see footnote" class="footnote"><sup>3</sup></a>.</p>
+
+<p><strong>Proof:</strong> Take <span class="math">\(a\in A\)</span>, <span class="math">\(b \geq A^\forall\)</span>, and <span class="math">\(N \in *\N\)</span> with <span class="math">\(\frac {b-a}{N} = h \in E\)</span> (eg take <span class="math">\(\epsilon \in E\)</span> and <span class="math">\(N = \lceil \frac{b-a}{\epsilon} \rceil\)</span></p>
+
+<h2 id="complexanalysis">Complex Analysis</h2>
+
+<p>Now in order to develop complex analysis for the hyperrationals, we have a few options for what field to work over. We can add:</p>
+
+<ul>
+<li>A root of <span class="math">\(x^2+1\)</span></li>
+<li>A root of every polynomial</li>
+<li>A root of every function</li>
+<li>A root of every <span class="math">\(P\)</span> function for <span class="math">\(P\)</span> = continuous, non-constant, …</li>
+</ul>
+
+<p>The later options are a bit more involved, but the first two are worth taking seriously. Just like how algebraic closure is a theorem for <span class="math">\(\R[i]\)</span>, almost algebraic closure is a theorem for <span class="math">\(*Q[i]\)</span>, and so it’s cheating to assume it. Subjects that need algebraic closure like representation theory and algebraic geometry can be done with almost algebraic closure, but it may be better to just assume full algebraic closure. For the algebraic closures of the various quotients of <span class="math">\(*\Q\)</span> you’ll probably need the full algebraic closure. For our purposes we’ll use <span class="math">\(C = *\Q[i]\)</span>.</p>
+
+<p>Theorem: (Fundamental Theorem of Almost Algebra)</p>
+
+<div class="footnotes">
+<hr />
+<ol>
+
+<li id="fn:1">
+<p>I like to call ChatGPT by its first name. <a href="#fnref:1" title="return to body" class="reversefootnote">&#160;&#8617;&#xfe0e;</a></p>
+</li>
+
+<li id="fn:2">
+<p>So <span class="math">\(A\subseteq B\)</span> is equivalent to <span class="math">\(A^\forall = B^\exists\)</span> and <span class="math">\(A\cap B \neq \emptyset\)</span> is equivalent to <span class="math">\(A^\exists = B^\exists\)</span>. <a href="#fnref:2" title="return to body" class="reversefootnote">&#160;&#8617;&#xfe0e;</a></p>
+</li>
+
+<li id="fn:3">
+<p>Beware that <span class="math">\(*\Q / E\)</span> is an additive group quotient, not a ring quotient. I write this as if I’m letting you know for your sake, but really I’m scared that people will take any imprecision as an excuse to dismiss me. <a href="#fnref:3" title="return to body" class="reversefootnote">&#160;&#8617;&#xfe0e;</a></p>
+</li>
+
+</ol>
+</div>
+    </div>
+    <div class="footer">
+      <hr>
+      Made with
+      <a href="https://hale.su/serenity.html">serenity.css</a>.
+    </div>
+  </body>
+</html>
