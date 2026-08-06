@@ -76,9 +76,11 @@
 
 <p>Instead of using <span class="math">\(\hbar = h/\sout\pi\)</span>, I recommend <span class="math">\(\dot h = h/\dot\pi\)</span>, since <span class="math">\(\hbar\)</span> always appears with a factor of <span class="math">\(\pm i\)</span> anyways. If we take the perspective that radians are naturally imaginary then this is well motivated.</p>
 
-<p>It’s probably best to never use fractions or radicals and just use exponents instead. This is a realization that I came to in the final minutes of my Numerical Relativity exam. I had a massive algebraic bash ahead of me, and I wasn’t sure if I’d be able to finish it in time. In that moment it became clear to me what I had to do.</p>
+<p>One idea I’m toying with is quantifier annotations for sets and multivalued expressions. Instead of saying things like “Let <span class="math">\(\log\)</span> be the principal branch of the logarithm, defined on the complement of the nonpositive real axis” you can just let <span class="math">\(\log\)</span> be multivalued and use it like <span class="math">\(\log^\forall 1 = \dot\pi\Z^\exists\)</span>.</p>
 
-<p>Fractions, radicals, and exponents all interact with each other in different ways. If you only use exponents then you only have to use one set of rules. Fractions and radicals are a special tool that you get to use when your exponent happens to be <span class="math">\(-\)</span> or <span class="math">\(n^-\)</span>, and if you are not so lucky to be on that blessed path then you have to fall back to the general case anyways. It’s better to not have a special case to begin with.</p>
+<p>It’s probably best to never use fractions or radicals and just use exponents instead. This is a realization that came to me in the final minutes of my Numerical Relativity exam. I had a massive algebraic bash ahead of me, and I wasn’t sure if I’d be able to finish it in time. In that moment it suddenly became clear what I had to do.</p>
+
+<p>Fractions, radicals, and exponents all interact with each other in different ways, but if you only use exponents then you have one set of rules. Fractions and radicals are a special tool that you get to use when your exponent happens to be <span class="math">\(-\)</span> or <span class="math">\(n^-\)</span>, and if you are not so lucky to be on that blessed path then you have to fall back to the general case anyways. It’s better to not have a special case to begin with.</p>
 
 <p>But if you took this convention to its extreme then you’d end up writing things like <span class="math">\(2^{-2^-}\)</span>. I think the right compromise is to use shorthand like <span class="math">\(/\)</span> in tight spaces like exponents or matrix entries, and use <span class="math">\(2^-\)</span> otherwise. But maybe it’s better to get comfortable with exponent towers.</p>
 
@@ -96,7 +98,7 @@ $$</p>
 
 <p>I’m using <code>\overgroup</code> because it’s available in Katex, but an arc shape might be better. Newton used a similar notation <span class="math">\(\angl{4ac}\)</span>, which might be the move tbh<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote"><sup>1</sup></a>. But it looks like the Katex version <code>\angl</code> is somewhat limited, it doesn’t let you put exponents inside.</p>
 
-<p>It is standard to write expressions in order from simple to complex. Eg we write <span class="math">\(-2x\)</span> and not <span class="math">\(x2(-)\)</span>. However there are some good reasons to write the complex parts first. The complex parts often contextualize the simple parts. It is also often easiest to figure out the simple parts last. Often you will have an expression with three or four factors of <span class="math">\(-\)</span>, with each factor coming from some other part of the expression, so if you want to figure out the sign before writing down the rest of the expression then you have to hold the whole expression in your head.</p>
+<p>It is standard to write expressions in order from simple to complex. Eg we write <span class="math">\(-2x\)</span> and not <span class="math">\(x2(-)\)</span>. However there are some good reasons to write the complex parts first. The complex parts often contextualize the simple parts. It is also often easiest to figure out the simple parts last. Often you will have an expression with three or four factors of <span class="math">\(-\)</span>, with each factor coming from a different part of the expression, so if you want to figure out the sign before writing down the rest of the expression then you have to hold the whole expression in your head.</p>
 
 <p>We can try writing the quadratic formula from complex to simple:</p>
 
@@ -118,7 +120,7 @@ $$</p>
 \undergroup{-b \pm \undergroup{b^2&#8211;4ac}^/}&nbsp;\undergroup{2a}^-
 $$</p>
 
-<p>The big game changer though is Penrose diagrams, which I won’t go into here because they’re less widely applicable and they can’t be Katexed. Someday I’ll find a good way to Latex them.</p>
+<p>The big game changer though is Penrose diagrams, which I won’t go into here because they’re less widely applicable and they can’t be Katexed.</p>
 
 <div class="footnotes">
 <hr />
